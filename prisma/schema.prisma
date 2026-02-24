@@ -14,43 +14,48 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(autoincrement())
+  id            String      @id @default(cuid())
   email         String      @unique
   passwordHash  String    
-  createdAt     DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime    @updatedAt @db.Timestamptz(6)
   folders       Folder[]
   files         File[]
+
+  createdAt     DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime    @updatedAt @db.Timestamptz(6)
 }
 
 model Folder {
-  id          String    @id @default(autoincrement())
+  id          String    @id @default(cuid())
   name        String    
-  owner       User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId     String
+  files       File[]
+
   createdAt   DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
-  files       File[]
+
+  owner       User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String
 
   @@unique([ownerId, name])
   @@index([ownerId])
 }
 
 model File {
-  id                String    @id @default(autoincrement())
+  id                String    @id @default(cuid())
   originalName      String
   storedName        String?
-  mimeType          String
-  sizeBytes         Int
-  storageProvider   String    @default("local")
   localPath         String?
   url               String?
-  providerKey       String?
-  uploadedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  size              Int
+  storageProvider   String    @default("local")
+  mimeType          String
+  
   owner             User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId           String
   folder            Folder    @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId          String
+
+  providerKey       String?
+  uploadedAt        DateTime  @default(now()) @db.Timestamptz(6)
 
   @@index([ownerId])
   @@index([folderId])
