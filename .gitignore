@@ -3,3 +3,10 @@ node_modules
 uploads
 .vscode
 /generated/prisma
+.DS_Store
+/build
+/package
+/prisma/dev.db
+.env.*
+!.env.example
+/docker-data
