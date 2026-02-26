@@ -9,8 +9,6 @@ import { configurePassport } from "./config/passport.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-configurePassport(prisma);
-
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,13 +39,22 @@ app.use(
     cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "lax" },
   }),
 );
-
+configurePassport(prisma);
 app.use(passport.session());
 /*
 |--------------------------------------------------------------------------
 | Routes
 |--------------------------------------------------------------------------
 */
+//TODO - create sign-up route to create user, create login route to login to upload page
+
+app.get("/signup", (req, res) => {
+  // logic to render signup form
+});
+
+app.post("/signup", (req, res) => {
+  // logic to create user and redirect to login page
+});
 
 // Health check route
 app.get("/", (req, res) => {
