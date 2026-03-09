@@ -8,7 +8,7 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { configurePassport } from "./config/passport.js";
 import multer from "multer";
 import storage from "./config/fileStorage.js";
-import signupValidation from "./middleware/handleSignupValidation.js";
+import usersRouter from "./routes/users.routes.js";
 import "dotenv/config";
 
 const app = express();
@@ -54,18 +54,12 @@ const upload = multer({ storage });
 //TODO - create sign-up route to create user, create login route to login to upload page
 
 //TODO - make sure email does not exist in the DB, add user to DB, redirect to login page
-app.get("/signup", signupValidation, (req, res) => {
-  res.render("signup");
-});
-
-app.post("/signup", (req, res) => {
-  // logic to create user and redirect to login page
-});
+app.use("/", usersRouter);
 
 // Health check route
-app.get("/", (req, res) => {
-  res.json({ message: "API is running" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "API is running" });
+// });
 
 /*
 |--------------------------------------------------------------------------
