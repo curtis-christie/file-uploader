@@ -6,8 +6,10 @@ import { fileURLToPath } from "node:url";
 import { prisma } from "./lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { configurePassport } from "./config/passport.js";
-import dotenv from "dotenv";
-dotenv.config();
+import multer from "multer";
+import storage from "./config/fileStorage.js";
+import signupValidation from "./middleware/handleSignupValidation.js";
+import "dotenv/config";
 
 const app = express();
 
@@ -15,8 +17,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const assetsPath = path.join(__dirname, "public");
 
-app.set("views", path.join((__dirname, "src", "views")));
 app.set("view engine", "ejs");
+app.set("views", path.join((__dirname, "src/views")));
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,9 @@ app.use(
 );
 configurePassport(prisma);
 app.use(passport.session());
+
+const upload = multer({ storage });
+
 /*
 |--------------------------------------------------------------------------
 | Routes
@@ -48,8 +53,9 @@ app.use(passport.session());
 */
 //TODO - create sign-up route to create user, create login route to login to upload page
 
-app.get("/signup", (req, res) => {
-  // logic to render signup form
+//TODO - make sure email does not exist in the DB, add user to DB, redirect to login page
+app.get("/signup", signupValidation, (req, res) => {
+  res.render("signup");
 });
 
 app.post("/signup", (req, res) => {
