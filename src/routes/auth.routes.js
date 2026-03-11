@@ -2,9 +2,13 @@ import { Router } from "express";
 
 const authRoutes = Router();
 
-// /auth routes
+// /auth/signup route
 authRoutes.get("/signup", (req, res) => {
-  res.json({ message: "server up and running" });
+  res.render("auth/signup");
+});
+
+authRoutes.post("/signup", (req, res) => {
+  // register user logic
 });
 
 export default authRoutes;
