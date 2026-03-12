@@ -3,10 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
     <title>Sign Up</title>
   </head>
   <body>
-    <form action="/signup" method="post"></form>
+    <form action="signup" method="post">
+      <label for="email">Email: </label>
+      <input type="email" name="email" id="email" />
+      <label for="password">Password: </label>
+      <input type="password" name="password" id="password" />
+      <label for="confirmPassword">Confirm Password: </label>
+      <input type="password" name="confirmPassword" id="confirmPassword" />
+      <button type="submit">Register</button>
+    </form>
   </body>
 </html>
