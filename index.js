@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import "dotenv/config";
 import sessionMiddleware from "./src/middleware/session.middleware.js";
 import { authRouter, indexRouter } from "./src/routes/index.routes.js";
+import { configurePassport } from "./src/config/passport.js";
 
 const app = express();
 
@@ -12,20 +13,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const assetsPath = path.join(__dirname, "public");
 
+// Config
 app.set("views", path.join(__dirname, "src/views"));
 app.set("view engine", "ejs");
 
+// Base MIddleware
 app.use(express.static(assetsPath));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Session Middleware
 app.use(sessionMiddleware);
 
-//TODO configurePassport() from config/passport.js
+configurePassport();
 
-//TODO app.use(passport.session())
+app.use(passport.session());
 
-//TODO set up signup/login routes plus views
+// Routes
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 

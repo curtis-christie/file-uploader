@@ -1,11 +1,12 @@
-import { createUser, findUser } from "../lib/queries.js";
+import passport from "passport";
+import { createUser, findUserByEmail } from "../lib/queries.js";
 import bcrypt from "bcryptjs";
 
 async function signUp(req, res, next) {
   try {
     const { email, password } = req.body;
 
-    const existingUser = await findUser(email);
+    const existingUser = await findUserByEmail(email);
 
     if (existingUser) {
       return res.status(409).json({
@@ -27,4 +28,27 @@ async function signUp(req, res, next) {
   }
 }
 
-export { signUp };
+async function login(req, res, next) {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.redirect("login");
+    }
+
+    req.login(user, (err) => {
+      if (err) return next(err);
+
+      return res.redirect("/dashboard");
+    });
+  })(req, res, next);
+}
+
+async function logout(req, res, next) {
+  req.logout((err) => {
+    if (err) return next(err);
+    res.redirect("/auth/login");
+  });
+}
+
+export { signUp, login, logout };

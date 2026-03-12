@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { signUp } from "../controllers/auth.controller.js";
+import { login, logout, signUp } from "../controllers/auth.controller.js";
 import { signupValidator } from "../middleware/validation/signup.validator.js";
 import { handleValidationErrors } from "../middleware/validation/handleValidationErrors.js";
 
@@ -15,5 +15,9 @@ authRoutes.post("/signup", signupValidator, handleValidationErrors, signUp);
 authRoutes.get("/login", (req, res) => {
   res.render("auth/login");
 });
+
+authRoutes.post("/login", login);
+
+authRoutes.get("/logout", logout);
 
 export default authRoutes;
