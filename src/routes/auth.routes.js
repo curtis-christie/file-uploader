@@ -12,4 +12,8 @@ authRoutes.get("/signup", (req, res) => {
 
 authRoutes.post("/signup", signupValidator, handleValidationErrors, signUp);
 
+authRoutes.get("/login", (req, res) => {
+  res.render("auth/login");
+});
+
 export default authRoutes;
